@@ -26,4 +26,20 @@ describe("transmission processor", function () {
         let result = processor("9701::<487297403495720912>");
         expect(result.rawData).not.toEqual(undefined);
     });
+    test("throw error if '>' not found", function () {
+        const expectedError = new Error('Data is invalid ; should end with ">"');
+        expect(() => { processor("9701::<487297403495720912"); }).toThrow(expectedError);
+    });
+    test("throws error if '<' not found", function () {
+        const expectedError = new Error('Data is invalid ; should start with "<"');
+        expect(() => { processor("9701::487297403495720912>"); }).toThrow(expectedError);
+    });
+    test("throws error if '<' and '>' not found", function () {
+        const expectedError = new Error('Data is invalid ; should start with "< and end with ">"');
+        expect(() => { processor("9701::487297403495720912"); }).toThrow(expectedError);
+    });
+    test("throws error if the transmission id cannot be converted to a number", function () {
+        const expectedError = new Error('Data is invalid ; the id needs to be a number');
+        expect(() => { processor("9A01::<487297403495720912>"); }).toThrow(expectedError);
+    });
 });
